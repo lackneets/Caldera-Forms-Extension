@@ -5,10 +5,10 @@ An Wordpress extension for Caldera Forms, store form-entries into PostType
 
 ## Processor Options
 
-**Post Type Slug** - specify the slug to store entries.  
-**Slug Migration** - migrate previous set post-type to the new one.  
-**Post Type Privacy** - set if entries can be seen in front-end.  
-**Title Field** -  pick a field to be title column in post list.
+**Post Type Slug** - Specify the slug to store entries.  
+**Slug Migration** - Migrate previous-set post-type to the new one.  
+**Post Type Privacy** - If entries can be seen in front-end.  
+**Title Field** -  Pick a field to be title column in post list.
 
 ## Screenshots
 
