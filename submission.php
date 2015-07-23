@@ -25,6 +25,10 @@ function cfx_migrate_post_type($form_options){
 
 function cfx_create_post_type() {
 
+  global $cfx_forms;
+
+  $cfx_forms = array();
+
   if(! cfx_caldera_loaded() ){
     return false;
   }
@@ -40,11 +44,21 @@ function cfx_create_post_type() {
     $title_field        = preg_replace('/^%(.+)%$/', '$1', $processor_setting['config']['title_field']);
     $has_title_field    = false;
 
+    $cfx_forms[$post_type_slug] = array(
+      'id' => $form_id,
+      'name'    => $form_detail['name'],
+      'fields'  => array(),
+    );
+
     foreach (Caldera_Forms::get_form($form_id)['fields'] as $fid => $field) {
       if($field['type'] == 'html') continue;
       if($field['type'] == 'button') continue;
-      if($field['entry_list'] == 1) $list_columns[$field['slug']] = $field['label'];
+      if($field['entry_list'] == 1) $list_columns[$field['slug']] = $field['label']; // 顯示在 list 上的欄位
       if($field['slug']== $title_field) $has_title_field = true;
+      $cfx_forms[$post_type_slug]['fields'][$field['slug']] = array(
+        'label' => $field['label'],
+        'id'    => $fid,
+      );
     }
 
     register_post_type( $post_type_slug,
@@ -65,6 +79,12 @@ function cfx_create_post_type() {
         //'taxonomies'          => array('category'),
       )
     );
+
+    // Add function buttons to list view
+    add_filter('views_edit-'.$post_type_slug, function($views) use ($post_type_slug){
+      $views['export-all'] = '<a href="?cfx_export_csv='.$post_type_slug.'"><button type="button" title="Export all as spreadsheet" style="margin:5px">Export CSV</button></a>';
+      return $views;
+    });
 
     // Define Post Columns
     add_filter('manage_'.$post_type_slug.'_posts_columns', function($columns) use ($list_columns, $has_title_field, $title_field){ 

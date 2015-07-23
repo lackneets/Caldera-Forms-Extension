@@ -17,5 +17,6 @@ define('CFX_CALDERA_COREPATH', 'caldera-forms/caldera-core.php');
 
 require 'dependency.php';
 require 'submission.php';
+require 'submission-export.php';
 require 'processor.php';
 require 'helpers/cfx_get_entries.php';
